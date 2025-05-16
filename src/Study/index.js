@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { readDeck } from "../utils/api";
-import Breadcrumb from "./Breadcrumb";
-import Card from "./Card";
+import Breadcrumb from "../components/Breadcrumb";
+import Card from "../components/Card";
 import NotEnoughCards from "./NotEnoughCards";
 
 function Study() {
@@ -35,11 +35,17 @@ function Study() {
   };
 
   const handleNext = () => {
+    if (!deck) return;
+    
     if (currentCardIndex < deck.cards.length - 1) {
       setCurrentCardIndex(currentCardIndex + 1);
       setIsFlipped(false);
     } else {
-      if (window.confirm("Restart cards?\n\nClick 'cancel' to return to the home page.")) {
+      const restart = window.confirm(
+        "Restart cards?\n\nClick 'cancel' to return to the home page."
+      );
+      
+      if (restart) {
         setCurrentCardIndex(0);
         setIsFlipped(false);
       } else {
@@ -50,6 +56,11 @@ function Study() {
 
   if (!deck) {
     return <div>Loading...</div>;
+  }
+
+  // Ensure deck.cards exists before accessing it
+  if (!deck.cards) {
+    return <div>Error: No cards found in this deck.</div>;
   }
 
   return (

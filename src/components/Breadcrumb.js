@@ -8,9 +8,11 @@ function Breadcrumb({ deckName, deckId, currentPage }) {
         <li className="breadcrumb-item">
           <Link to="/">Home</Link>
         </li>
-        <li className="breadcrumb-item">
-          <Link to={`/decks/${deckId}`}>{deckName}</Link>
-        </li>
+        {deckName && deckId && (
+          <li className="breadcrumb-item">
+            <Link to={`/decks/${deckId}`}>{deckName}</Link>
+          </li>
+        )}
         <li className="breadcrumb-item active" aria-current="page">
           {currentPage}
         </li>
