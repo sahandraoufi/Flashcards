@@ -65,7 +65,7 @@ function Home() {
                     className="btn btn-danger"
                     onClick={() => handleDeleteDeck(deck.id)}
                   >
-                    <i className="bi bi-trash"></i>
+                    <i className="bi bi-trash"></i> Delete
                   </button>
                 </div>
               </div>
