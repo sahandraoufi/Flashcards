@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { readDeck, createCard } from "../utils/api";
 import Breadcrumb from "../components/Breadcrumb";
+import CardForm from "../components/CardForm";
 
 function AddCard() {
-  const [deck, setDeck] = useState(null);
+  const [deck, setDeck] = useState({ name: "", description: "" });
   const [formData, setFormData] = useState({
     front: "",
     back: "",
@@ -31,17 +32,16 @@ function AddCard() {
   }, [deckId]);
 
   const handleChange = ({ target }) => {
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       [target.name]: target.value,
-    });
+    }));
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       await createCard(deckId, formData);
-      // Clear the form after successful submission
       setFormData({
         front: "",
         back: "",
@@ -51,13 +51,9 @@ function AddCard() {
     }
   };
 
-  const handleDone = () => {
+  const handleCancel = () => {
     navigate(`/decks/${deckId}`);
   };
-
-  if (!deck) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div>
@@ -67,48 +63,13 @@ function AddCard() {
         currentPage="Add Card" 
       />
       <h2>{deck.name}: Add Card</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="front" className="form-label">
-            Front
-          </label>
-          <textarea
-            className="form-control"
-            id="front"
-            name="front"
-            value={formData.front}
-            onChange={handleChange}
-            placeholder="Front side of card"
-            rows="4"
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="back" className="form-label">
-            Back
-          </label>
-          <textarea
-            className="form-control"
-            id="back"
-            name="back"
-            value={formData.back}
-            onChange={handleChange}
-            placeholder="Back side of card"
-            rows="4"
-            required
-          />
-        </div>
-        <button
-          type="button"
-          className="btn btn-secondary me-2"
-          onClick={handleDone}
-        >
-          Done
-        </button>
-        <button type="submit" className="btn btn-primary">
-          Save
-        </button>
-      </form>
+      <CardForm
+        formData={formData}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        handleCancel={handleCancel}
+        submitLabel="Save"
+      />
     </div>
   );
 }
