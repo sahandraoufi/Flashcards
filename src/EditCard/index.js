@@ -50,7 +50,14 @@ function EditCard() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await updateCard({ ...formData, id: cardId });
+      // Ensure we're sending all required card data
+      const updatedCard = {
+        id: Number(cardId),
+        deckId: Number(deckId),
+        front: formData.front,
+        back: formData.back,
+      };
+      await updateCard(updatedCard);
       navigate(`/decks/${deckId}`);
     } catch (error) {
       console.error(error);
